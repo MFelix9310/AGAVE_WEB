@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgavePredictor ML</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo-container">
+                <i class="fas fa-seedling plant-icon"></i>
+                <h1>AgavePredictor ML</h1>
+            </div>
+            <p class="subtitle">Predicción de crecimiento con machine learning</p>
+        </header>
+
+        <main>
+            <div class="content-wrapper">
+                <div class="input-section">
+                    <h2>Datos de la Planta</h2>
+
+                    <div class="form-group">
+                        <label for="altura">Altura de la Planta (cm):</label>
+                        <div class="slider-container">
+                            <input type="range" id="altura-slider" min="20" max="300" step="0.5" value="120.5" class="slider">
+                            <input type="number" id="altura" min="20" max="300" step="0.1" value="120.5" placeholder="Ej: 120.5">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="diametro">Diámetro de la Roseta (cm):</label>
+                        <div class="slider-container">
+                            <input type="range" id="diametro-slider" min="10" max="200" step="0.5" value="80.0" class="slider">
+                            <input type="number" id="diametro" min="10" max="200" step="0.1" value="80.0" placeholder="Ej: 80.0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hojas">Número de Hojas Funcionales:</label>
+                        <div class="slider-container">
+                            <input type="range" id="hojas-slider" min="5" max="80" step="1" value="25" class="slider">
+                            <input type="number" id="hojas" min="5" max="80" value="25" placeholder="Ej: 25">
+                        </div>
+                    </div>
+
+                    <button id="predict-btn" class="primary-btn">
+                        <i class="fas fa-calculator"></i> Predecir Tiempo de Crecimiento
+                    </button>
+                </div>
+
+                <div class="visual-section">
+                    <div class="agave-visualization">
+                        <div id="agave-container" class="agave-plant">
+                            <!-- SVG para la visualización mejorada del agave -->
+                            <svg id="agave-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                              <!-- Fondo transparente -->
+                              <rect width="500" height="500" fill="none" />
+                              
+                              <!-- Base/raíz del agave -->
+                              <ellipse id="ground" cx="250" cy="400" rx="60" ry="20" fill="#8B4513" />
+                              
+                              <!-- Hojas del agave en disposición de roseta -->
+                              <!-- Hojas inferiores (más grandes y extendidas ) -->
+                              <g id="background-leaves">
+                                <path d="M 250,380 C 220,380 180,350 150,300 C 140,280 135,260 145,250 C 155,240 170,245 190,260 C 210,275 230,300 250,380 Z" fill="#4D8061" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                <path d="M 250,380 C 280,380 320,350 350,300 C 360,280 365,260 355,250 C 345,240 330,245 310,260 C 290,275 270,300 250,380 Z" fill="#4D8061" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                
+                                <path d="M 250,380 C 230,380 190,360 160,320 C 150,300 145,280 155,270 C 165,260 180,265 200,280 C 220,295 240,320 250,380 Z" fill="#5D9071" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                <path d="M 250,380 C 270,380 310,360 340,320 C 350,300 355,280 345,270 C 335,260 320,265 300,280 C 280,295 260,320 250,380 Z" fill="#5D9071" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                              </g>
+                              
+                              <!-- Hojas medias (verticales) -->
+                              <g id="leaves">
+                                <path d="M 250,380 C 240,370 220,320 210,260 C 205,230 205,200 220,190 C 235,180 245,200 250,230 C 255,260 250,320 250,380 Z" fill="#6BA081" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                <path d="M 250,380 C 260,370 280,320 290,260 C 295,230 295,200 280,190 C 265,180 255,200 250,230 C 245,260 250,320 250,380 Z" fill="#6BA081" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                
+                                <path d="M 250,380 C 235,375 200,340 180,280 C 170,250 170,220 185,210 C 200,200 215,220 225,250 C 235,280 245,340 250,380 Z" fill="#7AB091" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                <path d="M 250,380 C 265,375 300,340 320,280 C 330,250 330,220 315,210 C 300,200 285,220 275,250 C 265,280 255,340 250,380 Z" fill="#7AB091" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                
+                                <!-- Hojas superiores (más pequeñas y centrales) -->
+                                <path d="M 250,380 C 245,360 235,300 230,250 C 225,220 225,190 235,180 C 245,170 255,190 260,220 C 265,250 255,320 250,380 Z" fill="#89C0A1" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                <path d="M 250,380 C 255,360 265,300 270,250 C 275,220 275,190 265,180 C 255,170 245,190 240,220 C 235,250 245,320 250,380 Z" fill="#89C0A1" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                
+                                <path d="M 250,380 C 248,350 245,300 245,240 C 245,210 248,180 255,170 C 262,160 268,170 270,200 C 272,230 252,320 250,380 Z" fill="#98D0B1" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                <path d="M 250,380 C 252,350 255,300 255,240 C 255,210 252,180 245,170 C 238,160 232,170 230,200 C 228,230 248,320 250,380 Z" fill="#98D0B1" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                
+                                <!-- Hojas centrales (más pequeñas y verticales) -->
+                                <path d="M 250,380 C 248,340 246,280 246,230 C 246,200 248,170 252,160 C 256,150 260,160 262,190 C 264,220 252,300 250,380 Z" fill="#A7E0C1" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                                <path d="M 250,380 C 252,340 254,280 254,230 C 254,200 252,170 248,160 C 244,150 240,160 238,190 C 236,220 248,300 250,380 Z" fill="#A7E0C1" stroke="#2D4D3A" stroke-width="1" class="leaf" />
+                              </g>
+                              
+                              <!-- Núcleo central (piña) -->
+                              <ellipse id="core" cx="250" cy="380" rx="15" ry="10" fill="#5D9071" />
+                              
+                              <!-- Espinas en los bordes de las hojas -->
+                              <g id="spines">
+                                <!-- Espinas hoja 1 -->
+                                <path d="M 150,300 L 145,295 M 160,320 L 155,315 M 170,340 L 165,335 M 180,360 L 175,355 M 190,370 L 185,365" stroke="#2D4D3A" stroke-width="1" />
+                                <!-- Espinas hoja 2 -->
+                                <path d="M 350,300 L 355,295 M 340,320 L 345,315 M 330,340 L 335,335 M 320,360 L 325,355 M 310,370 L 315,365" stroke="#2D4D3A" stroke-width="1" />
+                                <!-- Espinas hoja 3 -->
+                                <path d="M 210,260 L 205,255 M 215,280 L 210,275 M 220,300 L 215,295 M 225,320 L 220,315 M 230,340 L 225,335" stroke="#2D4D3A" stroke-width="1" />
+                                <!-- Espinas hoja 4 -->
+                                <path d="M 290,260 L 295,255 M 285,280 L 290,275 M 280,300 L 285,295 M 275,320 L 280,315 M 270,340 L 275,335" stroke="#2D4D3A" stroke-width="1" />
+                              </g>
+                              
+                              <!-- Puntas afiladas de las hojas -->
+                              <g id="tips">
+                                <path d="M 145,250 L 135,235" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 355,250 L 365,235" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 220,190 L 215,170" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 280,190 L 285,170" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 185,210 L 175,190" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 315,210 L 325,190" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 235,180 L 230,160" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 265,180 L 270,160" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 255,170 L 253,150" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 245,170 L 247,150" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 252,160 L 251,140" stroke="#2D4D3A" stroke-width="2" />
+                                <path d="M 248,160 L 249,140" stroke="#2D4D3A" stroke-width="2" />
+                              </g>
+                              
+                              <!-- Detalles de textura en las hojas -->
+                              <g id="details">
+                                <path d="M 250,380 C 240,340 230,300 220,260 M 250,380 C 260,340 270,300 280,260" stroke="#2D4D3A" stroke-width="0.5" stroke-opacity="0.3" />
+                                <path d="M 250,380 C 235,350 220,320 205,290 M 250,380 C 265,350 280,320 295,290" stroke="#2D4D3A" stroke-width="0.5" stroke-opacity="0.3" />
+                                <path d="M 250,380 C 230,360 210,340 190,320 M 250,380 C 270,360 290,340 310,320" stroke="#2D4D3A" stroke-width="0.5" stroke-opacity="0.3" />
+                              </g>
+                              
+                              <!-- Tallo -->
+                              <path id="stem" d="M 245,400 Q 248,390 250,380" stroke="#5D8061" stroke-width="6" fill="none" />
+                            </svg>
+                        </div>
+                        <div class="dimensions-info">
+                            <span id="height-info">Altura: 120.5 cm</span>
+                            <span id="diameter-info">Diámetro: 80.0 cm</span>
+                            <span id="leaves-info">Hojas: 25</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <h2>Resultados</h2>
+                <div id="results-display">
+                    <p class="instruction-text">Mueva los sliders para modificar las características de la planta y presione el botón "Predecir" para obtener resultados.</p>
+                </div>
+                <div id="loading-indicator" class="hidden">
+                    <div class="spinner"></div>
+                    <p>Procesando predicción...</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Desarrollado con <i class="fas fa-heart"></i> y ML | AgavePredictor ML &copy; 2023</p>
+        </footer>
+    </div>
+
+    <!-- Template para CSRF token -->
+    {% csrf_token %}
+    
+    <!-- Asegurarse de que no haya caché -->
+    <script src="{% static 'js/script.js' %}?v={% now 'U' %}"></script>
+    
+    <!-- Debugging info -->
+    <div id="debug-info" style="display: none;">
+        <p>CSRF Token: {{ csrf_token }}</p>
+    </div>
+</body>
+</html> 

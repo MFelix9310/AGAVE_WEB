@@ -1,0 +1,471 @@
+/* Variables globales */
+:root {
+    --primary-color: #0e7c3f;
+    --secondary-color: #8cc084;
+    --accent-color: #d4b160;
+    --background-color: #f8f9fa;
+    --text-color: #333;
+    --border-color: #ddd;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    --leaf-color-1: #4a7538;
+    --leaf-color-2: #5d8c3f;
+    --leaf-color-3: #6ba349;
+    --soil-color: #8a5a44;
+}
+
+/* Estilos globales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+/* Contenedor principal */
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos del encabezado */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.plant-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-right: 15px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+}
+
+/* Layout principal */
+main {
+    flex: 1;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* Sección de inputs */
+.input-section {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+/* Contenedor de slider e input */
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Estilos para el slider */
+.slider {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #e9e9e9;
+    border-radius: 4px;
+    outline: none;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: none;
+}
+
+/* Estilos para los inputs numéricos */
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(140, 192, 132, 0.2);
+}
+
+.primary-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+}
+
+.primary-btn:hover {
+    background-color: #085f2f;
+}
+
+.primary-btn i {
+    margin-right: 8px;
+}
+
+/* Sección visual */
+.visual-section {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+}
+
+.agave-visualization {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.agave-plant {
+    width: 320px;
+    height: 320px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para los elementos SVG del agave */
+#agave-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+.leaf {
+    transition: d 0.6s ease-in-out, stroke-width 0.5s ease;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+}
+
+#core {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Agregar animación sutil para las hojas */
+@keyframes leafSway {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(0.5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+#leaves path {
+    transform-origin: 150px 180px;
+    animation: leafSway 5s ease-in-out infinite;
+    animation-delay: calc(var(--leaf-index, 0) * 0.1s);
+}
+
+/* Cada hoja tendrá un retraso ligeramente diferente para un efecto más natural */
+#leaves path:nth-child(odd) {
+    animation-duration: 6s;
+}
+
+#leaves path:nth-child(even) {
+    animation-duration: 7s;
+}
+
+#leaves path:nth-child(3n) {
+    animation-duration: 6.5s;
+}
+
+.dimensions-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    width: 100%;
+}
+
+.dimensions-info span {
+    font-weight: 600;
+}
+
+/* Sección de resultados */
+.results-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    margin-bottom: 30px;
+}
+
+#results-display {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid var(--secondary-color);
+    min-height: 100px;
+}
+
+.success-message {
+    color: var(--success-color);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.error-message {
+    color: var(--error-color);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.prediction-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 15px 0;
+}
+
+.instruction-text {
+    color: #777;
+    font-style: italic;
+}
+
+/* Indicador de carga */
+.hidden {
+    display: none;
+}
+
+#loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-left-color: var(--primary-color);
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animaciones */
+@keyframes grow {
+    from { transform: scale(0.95); filter: brightness(0.95); }
+    to { transform: scale(1); filter: brightness(1); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Pie de página */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+    color: #777;
+}
+
+footer i {
+    color: var(--error-color);
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+    
+    .visual-section {
+        order: -1;
+    }
+    
+    .agave-plant {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* Agregar animaciones de crecimiento para el agave */
+@keyframes leafGrow {
+    0% { transform: scale(0.3) rotate(-10deg); opacity: 0.7; }
+    50% { transform: scale(0.7) rotate(-5deg); opacity: 0.85; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes stemGrow {
+    0% { transform: scaleY(0.3); transform-origin: bottom; }
+    100% { transform: scaleY(1); transform-origin: bottom; }
+}
+
+@keyframes coreGrow {
+    0% { transform: scale(0.5); }
+    100% { transform: scale(1); }
+}
+
+@keyframes tipGrow {
+    0% { opacity: 0; }
+    70% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@keyframes spineGrow {
+    0% { opacity: 0; }
+    80% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Animación de expansión del agave */
+@keyframes agaveExpand {
+    0% { transform: scale(0.7); }
+    70% { transform: scale(1.05); }
+    85% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+}
+
+/* Animación de crecimiento completo del agave */
+.growing-agave #stem {
+    animation: stemGrow 2.5s ease-out forwards;
+}
+
+.growing-agave #core {
+    animation: coreGrow 2s ease-out 0.3s forwards;
+}
+
+.growing-agave #background-leaves path {
+    animation: leafGrow 3s ease-out forwards;
+    transform-origin: center bottom;
+}
+
+.growing-agave #leaves path {
+    animation: leafGrow 3.5s ease-out forwards;
+    transform-origin: center bottom;
+}
+
+.growing-agave #tips path {
+    animation: tipGrow 4s ease-out 1s forwards;
+}
+
+.growing-agave #spines path {
+    animation: spineGrow 4s ease-out 1.5s forwards;
+}
+
+.growing-agave {
+    animation: agaveExpand 4s ease-out forwards;
+}
+
+/* Asegurar que las hojas tienen puntos de origen específicos para cada una */
+#leaves path:nth-child(odd) {
+    transform-origin: 250px 380px;
+}
+
+#leaves path:nth-child(even) {
+    transform-origin: 250px 380px;
+}
+
+#background-leaves path:nth-child(odd) {
+    transform-origin: 250px 380px;
+}
+
+#background-leaves path:nth-child(even) {
+    transform-origin: 250px 380px;
+} 

@@ -1,0 +1,6 @@
+Este directorio debe contener los siguientes archivos:
+
+1. modelo_agave_final.keras - El modelo TensorFlow entrenado
+2. preprocessor.pkl - El preprocesador scikit-learn guardado
+
+Por favor, coloca estos archivos aquí antes de ejecutar la aplicación. 
